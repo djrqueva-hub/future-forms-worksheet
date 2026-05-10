@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>future forms – interactive revision worksheet</title>
+  <style>
+    :root {
+      --bg: #f5f5f2;
+      --paper: #ffffff;
+      --ink: #1f2933;
+      --muted: #5f6b7a;
+      --line: #d7dce2;
+      --accent: #1f4e79;
+      --accent2: #2f6f73;
+      --good: #18743a;
+      --bad: #a61b1b;
+      --soft-good: #eaf7ee;
+      --soft-bad: #fdecec;
+      --soft-blue: #eaf2f8;
+      --locked: #8a5a00;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Calibri, Arial, sans-serif;
+      font-size: 12pt;
+      line-height: 1;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    header {
+      background: #17212b;
+      color: #ffffff;
+      padding: 28px 18px;
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: 24pt;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 18pt;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 14pt;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin: 0 0 10px;
+    }
+
+    .subtitle {
+      color: #d7dee8;
+      max-width: 760px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 12px 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .score-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: var(--soft-blue);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .progress {
+      height: 14px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    .progress > div {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.35s ease;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 22px 18px 48px;
+    }
+
+    section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 14px 34px rgba(23, 33, 43, 0.06);
+    }
+
+    .grammar-box {
+      background: #f8fafc;
+      border-left: 5px solid var(--accent);
+      padding: 14px;
+      border-radius: 12px;
+      margin: 12px 0;
+    }
+
+    .video-box {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr;
+    }
+
+    .video-placeholder {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      background: #f8fafc;
+    }
+
+    .question {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin: 12px 0;
+      background: #ffffff;
+    }
+
+    .question-title {
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .options {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      cursor: pointer;
+    }
+
+    .option {
+      display: block;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fbfcfd;
+      transition: border 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .option:hover {
+      border-color: var(--accent);
+      background: #f3f8fc;
+      transform: translateY(-1px);
+    }
+
+    input[type="radio"] {
+      margin-right: 8px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-family: Calibri, Arial, sans-serif;
+      font-size: 12pt;
+    }
+
+    .text-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    button, .resource-link {
+      appearance: none;
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      background: var(--accent);
+      color: white;
+      font-family: Calibri, Arial, sans-serif;
+      font-size: 12pt;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button.secondary {
+      background: #374151;
+    }
+
+    button.ghost {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .feedback {
+      min-height: 18px;
+      margin-top: 8px;
+      font-weight: 700;
+    }
+
+    .good {
+      color: var(--good);
+    }
+
+    .bad {
+      color: var(--bad);
+    }
+
+    .neutral {
+      color: var(--muted);
+    }
+
+    .section-status {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #f8fafc;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .success-panel {
+      display: none;
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--soft-good);
+      border: 1px solid #9bd3ac;
+      margin-top: 14px;
+    }
+
+    .locked-panel {
+      padding: 16px;
+      border-radius: 14px;
+      background: #fff8e6;
+      border: 1px solid #f2cf7b;
+      color: var(--locked);
+      margin-top: 14px;
+      font-weight: 700;
+    }
+
+    .mini-grid {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      margin-top: 10px;
+    }
+
+    .mini-card {
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fbfcfd;
+    }
+
+    .final-zone {
+      border: 2px solid var(--accent);
+    }
+
+    .small {
+      font-size: 11pt;
+      color: var(--muted);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .shake {
+      animation: shake 0.25s ease;
+    }
+
+    .pulse {
+      animation: pulse 0.55s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.025); }
+      100% { transform: scale(1); }
+    }
+
+
+    .name-panel {
+      border: 2px solid var(--accent);
+      background: #f8fafc;
+    }
+
+    .name-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .name-row input {
+      margin: 0;
+    }
+
+    .lock-card {
+      background: #fff8e6;
+      border: 1px solid #f2cf7b;
+      color: var(--locked);
+      font-weight: 700;
+    }
+
+    .lock-card p {
+      margin-bottom: 0;
+    }
+
+    .video-link {
+      width: fit-content;
+      background: #374151;
+    }
+
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 20pt;
+      }
+
+      section {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>future forms – interactive revision worksheet</h1>
+      <p class="subtitle">Revise will, be going to, the present continuous for future arrangements, and might. Practise each form separately, then complete the final mixed challenge.</p>
+    </div>
+  </header>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="score-row">
+        <span class="badge">practice score: <span id="practiceScore">0</span>/<span id="practiceTotal">0</span></span>
+        <span class="badge">final challenge: <span id="finalScore">0</span>/<span id="finalTotal">0</span></span>
+        <span class="badge">section unlock: <span id="sectionTarget">85%</span></span>
+        <span class="badge">final unlock: <span id="unlockTarget">90%</span></span>
+      </div>
+      <div class="progress" aria-label="overall progress">
+        <div id="overallProgress"></div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+
+    <section class="name-panel" id="studentNameSection">
+      <h2>student name</h2>
+      <p>Enter your name before starting. Your feedback will then be personalised.</p>
+      <div class="name-row">
+        <input type="text" id="studentNameInput" placeholder="Example: Sara">
+        <button onclick="saveStudentName()">Start worksheet</button>
+      </div>
+      <p class="small" id="studentNameMessage">No name entered yet.</p>
+    </section>
+    <section>
+      <h2>video support – understanding future forms</h2>
+      <div class="video-box">
+        <div class="video-placeholder">
+          <p><strong>Video support:</strong> open the video in a new tab before starting the worksheet.</p>
+          <p class="small">The video is not embedded in this page, so macOS should not keep asking for network access.</p>
+          <a class="resource-link video-link" href="https://www.youtube.com/watch?v=n14zCZAvSjI" target="_blank" rel="noopener">Open the video</a>
+        </div>
+        <div class="grammar-box">
+          <p><strong>Focus while watching:</strong></p>
+          <p>– how <strong>will</strong> is used for instant decisions, promises and predictions</p>
+          <p>– how <strong>be going to</strong> is used for plans and for predictions based on present evidence</p>
+          <p>– how the <strong>present continuous</strong> is used for fixed future arrangements</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lock-card hidden" id="lock_ex1"><p>Enter your name to unlock exercise 1.</p></section>
+
+    <section id="exercise1">
+      <h2>grammar 1 – will / won’t</h2>
+      <div class="grammar-box">
+        <p><strong>Form:</strong> will + base verb / won’t + base verb</p>
+        <p><strong>Use:</strong> instant decision, promise or offer, prediction</p>
+        <p><strong>Example:</strong> I think people will travel in electric flying cars.</p>
+      </div>
+      <div id="ex1Questions"></div>
+      <div class="section-status" id="ex1Status">Complete the questions to see your result.</div>
+      <button class="ghost" onclick="resetSection('ex1')">Recommencer cette partie</button>
+    </section>
+
+    <section class="lock-card hidden" id="lock_ex2"><p>Exercise 2 is locked. Reach at least 85% in exercise 1 first.</p></section>
+
+    <section id="exercise2">
+      <h2>grammar 2 – be going to</h2>
+      <div class="grammar-box">
+        <p><strong>Form:</strong> am / is / are going to + base verb</p>
+        <p><strong>Use:</strong> plan or intention decided before speaking; prediction based on present evidence</p>
+        <p><strong>Example:</strong> We’re going to plant trees in the school garden.</p>
+      </div>
+      <h3>exercise 2 – write questions with going to</h3>
+      <div id="ex2Questions"></div>
+      <div class="section-status" id="ex2Status">Write each question, then check it immediately.</div>
+      <button class="ghost" onclick="resetSection('ex2')">Recommencer cette partie</button>
+    </section>
+
+    <section class="lock-card hidden" id="lock_ex3"><p>Exercise 3 is locked. Reach at least 85% in exercise 2 first.</p></section>
+
+    <section id="exercise3">
+      <h2>exercise 3 – what is going to happen?</h2>
+      <div class="grammar-box">
+        <p>Use <strong>be going to</strong> for predictions based on present evidence.</p>
+        <p><strong>Example:</strong> There are a lot of black clouds. → It’s going to rain.</p>
+      </div>
+      <div id="ex3Questions"></div>
+      <div class="section-status" id="ex3Status">Write each prediction, then check it immediately.</div>
+      <button class="ghost" onclick="resetSection('ex3')">Recommencer cette partie</button>
+    </section>
+
+    <section class="lock-card hidden" id="lock_ex4"><p>Exercise 4 is locked. Reach at least 85% in exercise 3 first.</p></section>
+
+    <section id="exercise4">
+      <h2>grammar 3 – present continuous for future</h2>
+      <div class="grammar-box">
+        <p><strong>Form:</strong> am / is / are + verb-ing + time expression</p>
+        <p><strong>Use:</strong> fixed arrangement already organised before speaking</p>
+        <p><strong>Example:</strong> We’re meeting outside the cinema at 7.</p>
+      </div>
+      <h3>exercise 4 – which is correct?</h3>
+      <div id="ex4Questions"></div>
+      <div class="section-status" id="ex4Status">Complete the questions to see your result.</div>
+      <button class="ghost" onclick="resetSection('ex4')">Recommencer cette partie</button>
+    </section>
+
+    <section class="lock-card hidden" id="lock_ex5"><p>Exercise 5 is locked. Reach at least 85% in exercise 4 first.</p></section>
+
+    <section id="exercise5">
+      <h2>grammar 4 – might</h2>
+      <div class="grammar-box">
+        <p><strong>Form:</strong> might + base verb</p>
+        <p><strong>Use:</strong> possibility, not certainty</p>
+        <p><strong>Example:</strong> Sea levels might rise if temperatures keep increasing.</p>
+      </div>
+      <h3>exercise 5 – will / going to / might</h3>
+      <div id="ex5Questions"></div>
+      <div class="section-status" id="ex5Status">Complete the questions to see your result.</div>
+      <button class="ghost" onclick="resetSection('ex5')">Recommencer cette partie</button>
+    </section>
+
+    <section class="lock-card hidden" id="lock_final"><p>The final mixed challenge is locked. Reach at least 85% in each previous section first.</p></section>
+
+    <section class="final-zone" id="final">
+      <h2>final practice challenge – future forms</h2>
+      <p>You need at least <strong>90%</strong>. You can restart the challenge until you reach the target. Then the official Google Form opens for the recorded result.</p>
+      <div class="mini-grid">
+        <div class="mini-card"><strong>will</strong><br><span class="small">instant decision, promise, prediction</span></div>
+        <div class="mini-card"><strong>going to</strong><br><span class="small">plan or evidence now</span></div>
+        <div class="mini-card"><strong>present continuous</strong><br><span class="small">fixed arrangement</span></div>
+        <div class="mini-card"><strong>might</strong><br><span class="small">possibility, not certain</span></div>
+      </div>
+      <div id="finalQuestions"></div>
+      <div class="section-status" id="finalStatus">Complete the final challenge. The official Google Form unlocks when you reach 90%.</div>
+      <div class="text-actions">
+        <button onclick="checkFinal()">Check final challenge</button>
+        <button class="secondary" onclick="newFinalAttempt()">New attempt</button>
+      </div>
+      <div class="locked-panel" id="lockedPanel">Official final quiz locked. Reach 90% in the practice challenge to open the Google Form.</div>
+      <div class="success-panel" id="successPanel">
+        <h3>Official final quiz unlocked</h3>
+        <p>You have reached the practice target. Now complete the official Google Form so your score is recorded.</p>
+        <a class="resource-link" id="resourceLink" href="#" target="_blank" rel="noopener">Open the Google Form</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const FINAL_FORM_URL = "https://forms.gle/REPLACE_WITH_YOUR_GOOGLE_FORM_LINK";
+    const UNLOCK_PERCENT = 90;
+    const SECTION_TARGET_PERCENT = 85;
+    let studentName = "";
+
+    function getStudentName() {
+      return studentName || "there";
+    }
+
+    function saveStudentName() {
+      const input = document.getElementById("studentNameInput");
+      const value = input.value.trim();
+      const message = document.getElementById("studentNameMessage");
+
+      if (!value) {
+        message.textContent = "Please enter your name before starting.";
+        message.className = "feedback bad";
+        input.focus();
+        return;
+      }
+
+      studentName = value;
+      localStorage.setItem("futureFormsStudentName", studentName);
+      message.textContent = `Hello, ${studentName}. You can now start exercise 1.`;
+      message.className = "feedback good";
+      updateGates();
+    }
+
+    function loadStudentName() {
+      const saved = localStorage.getItem("futureFormsStudentName");
+      const input = document.getElementById("studentNameInput");
+      const message = document.getElementById("studentNameMessage");
+
+      if (saved) {
+        studentName = saved;
+        input.value = saved;
+        message.textContent = `Welcome back, ${studentName}.`;
+        message.className = "feedback good";
+      }
+    }
+
+    const data = {
+      ex1: [
+        { type: "mcq", prompt: "I will ______ around the world when I’m older.", options: ["to travel", "travel", "travelling"], answer: "travel", feedback: "After will, use the base verb: will travel." },
+        { type: "mcq", prompt: "My sister ______ be a singer because she loves singing.", options: ["is", "wills", "will"], answer: "will", feedback: "Use will + base verb for a prediction." },
+        { type: "mcq", prompt: "Will people ______ able to talk to animals in the future?", options: ["are", "be", "being"], answer: "be", feedback: "The correct form is will be able to." },
+        { type: "mcq", prompt: "They won’t ______ any pets.", options: ["having", "to have", "have"], answer: "have", feedback: "After won’t, use the base verb: won’t have." },
+        { type: "mcq", prompt: "There ______ be enough clean water in the future.", options: ["won’t", "willn’t", "isn’t"], answer: "won’t", feedback: "The negative form of will is won’t." },
+        { type: "mcq", prompt: "We will ______ on the moon.", options: ["live", "to live", "living"], answer: "live", feedback: "After will, use the base verb." },
+        { type: "mcq", prompt: "My father ______ be happy when he sees this broken window!", options: ["willn’t", "won’t", "isn’t"], answer: "won’t", feedback: "Won’t means will not." },
+        { type: "mcq", prompt: "Where ______ live when you grow up?", options: ["you will", "do you", "will you"], answer: "will you", feedback: "Question form: will + subject + base verb." },
+        { type: "mcq", prompt: "I’m sure people ______ use less plastic in the future.", options: ["will", "are", "going"], answer: "will", feedback: "Use will for a general future prediction." },
+        { type: "mcq", prompt: "I don’t think robots ______ replace all teachers.", options: ["will", "are", "going"], answer: "will", feedback: "Use will after I don’t think for a prediction." }
+      ],
+      ex2: [
+        { type: "text", prompt: "Your friend has won some money. (what / do with it?)", answers: ["what are you going to do with it"], feedback: "Question form: What are you going to do with it?" },
+        { type: "text", prompt: "Your friend is going to a wedding next week. (what / wear?)", answers: ["what are you going to wear"], feedback: "Question form: What are you going to wear?" },
+        { type: "text", prompt: "Your friend has just bought a new table. (where / put it?)", answers: ["where are you going to put it"], feedback: "Question form: Where are you going to put it?" },
+        { type: "text", prompt: "Your friend has decided to have a party. (who / invite?)", answers: ["who are you going to invite"], feedback: "Question form: Who are you going to invite?" },
+        { type: "text", prompt: "Your friend has bought some fish for dinner. (how / cook it?)", answers: ["how are you going to cook it"], feedback: "Question form: How are you going to cook it?" },
+        { type: "text", prompt: "Your friend has finished school. (what / do next?)", answers: ["what are you going to do next"], feedback: "Question form: What are you going to do next?" },
+        { type: "text", prompt: "Your friend looks tired. (when / go to bed?)", answers: ["when are you going to go to bed"], feedback: "Question form: When are you going to go to bed?" },
+        { type: "text", prompt: "Your friend is saving money. (what / buy?)", answers: ["what are you going to buy"], feedback: "Question form: What are you going to buy?" },
+        { type: "text", prompt: "Your friend is moving house. (where / live?)", answers: ["where are you going to live"], feedback: "Question form: Where are you going to live?" },
+        { type: "text", prompt: "Your friend is worried about exams. (how / revise?)", answers: ["how are you going to revise"], feedback: "Question form: How are you going to revise?" }
+      ],
+      ex3: [
+        { type: "text", prompt: "It is 8.30. Tom is leaving home. He has to be at work at 8.45. (be late)", answers: ["he is going to be late", "he's going to be late", "tom is going to be late"], feedback: "Use going to because the evidence is clear now: He is going to be late." },
+        { type: "text", prompt: "There is a hole in the bottom of the boat. Water is coming in. (sink)", answers: ["it is going to sink", "it's going to sink", "the boat is going to sink"], feedback: "Use going to for evidence now: The boat is going to sink." },
+        { type: "text", prompt: "The baby is crying and rubbing his eyes. (fall asleep)", answers: ["he is going to fall asleep", "he's going to fall asleep", "the baby is going to fall asleep"], feedback: "Use going to for evidence now: The baby is going to fall asleep." },
+        { type: "text", prompt: "The glass is on the edge of the table. (fall)", answers: ["it is going to fall", "it's going to fall", "the glass is going to fall"], feedback: "Use going to for evidence now: The glass is going to fall." },
+        { type: "text", prompt: "The road is icy and cars are skidding. (have an accident)", answers: ["they are going to have an accident", "they're going to have an accident", "the cars are going to have an accident"], feedback: "Use going to for evidence now: They are going to have an accident." },
+        { type: "text", prompt: "The battery on my phone is at 1%. (die)", answers: ["it is going to die", "it's going to die", "my phone is going to die", "the battery is going to die"], feedback: "Use going to for evidence now: My phone is going to die." },
+        { type: "text", prompt: "The wind is very strong and the sky is dark. (storm)", answers: ["there is going to be a storm", "there's going to be a storm", "it is going to storm", "it's going to storm"], feedback: "Use going to for evidence now: There is going to be a storm." },
+        { type: "text", prompt: "The dog is staring at the food on the table. (steal it)", answers: ["it is going to steal it", "it's going to steal it", "the dog is going to steal it"], feedback: "Use going to for evidence now: The dog is going to steal it." },
+        { type: "text", prompt: "The traffic is very heavy. (be late)", answers: ["we are going to be late", "we're going to be late", "they are going to be late", "they're going to be late", "i am going to be late", "i'm going to be late"], feedback: "Use going to for evidence now: We are going to be late." },
+        { type: "text", prompt: "The sky has turned very dark at midday. (rain)", answers: ["it is going to rain", "it's going to rain"], feedback: "Use going to for evidence now: It is going to rain." }
+      ],
+      ex4: [
+        { type: "mcq", prompt: "‘Did you call Max?’ ‘Oh no, I forgot. ______ him now.’", options: ["I call", "I’ll call"], answer: "I’ll call", feedback: "This is an instant decision, so use will." },
+        { type: "mcq", prompt: "______ you outside the hotel at 10.30.", options: ["I meet", "I’ll meet"], answer: "I’ll meet", feedback: "This is a promise or arrangement made now: I’ll meet you." },
+        { type: "mcq", prompt: "Please don’t go yet. OK, ______ a little longer.", options: ["I’m staying", "I’ll stay"], answer: "I’ll stay", feedback: "This is an instant decision, so use will." },
+        { type: "mcq", prompt: "______ a party next Saturday.", options: ["I’m having", "I’ll have"], answer: "I’m having", feedback: "A party next Saturday is an arrangement, so use present continuous." },
+        { type: "mcq", prompt: "‘Do you have any plans?’ ‘Yes, ______ to a wedding.’", options: ["we’re going", "we’ll go"], answer: "we’re going", feedback: "This is a plan or arrangement already organised." },
+        { type: "mcq", prompt: "I asked Sue what happened, but she ______ me.", options: ["doesn’t tell", "won’t tell"], answer: "won’t tell", feedback: "Won’t can show refusal: she won’t tell me." },
+        { type: "mcq", prompt: "I don’t know if I can win, but ______ my best.", options: ["I’m doing", "I’ll do"], answer: "I’ll do", feedback: "This is a promise: I’ll do my best." },
+        { type: "mcq", prompt: "What ______ tonight?", options: ["are you doing", "will you do"], answer: "are you doing", feedback: "Tonight suggests an arrangement, so use present continuous." },
+        { type: "mcq", prompt: "She can’t come. She ______ late.", options: ["works", "is working"], answer: "is working", feedback: "This is a fixed future arrangement: she is working late." },
+        { type: "mcq", prompt: "Don’t worry, ______ you.", options: ["I help", "I’ll help"], answer: "I’ll help", feedback: "This is an offer or promise, so use will." }
+      ],
+      ex5: [
+        { type: "mcq", prompt: "Temperatures ______ rise again next summer.", options: ["will", "are going to", "might"], answer: "might", feedback: "This is possible but not completely certain, so might is safest." },
+        { type: "mcq", prompt: "Look at those clouds. It ______ rain soon.", options: ["will", "is going to", "might"], answer: "is going to", feedback: "The clouds are evidence now, so use going to." },
+        { type: "mcq", prompt: "Our class has decided: we ______ organise a clean-up day.", options: ["will", "are going to", "might"], answer: "are going to", feedback: "This is a plan decided before speaking, so use going to." },
+        { type: "mcq", prompt: "If we don’t recycle more, oceans ______ become more polluted.", options: ["will", "are going to", "might"], answer: "will", feedback: "This is a general prediction or consequence, so use will." },
+        { type: "mcq", prompt: "Some animals ______ disappear in the future.", options: ["will", "are going to", "might"], answer: "might", feedback: "This is a possibility, not a certainty." },
+        { type: "mcq", prompt: "The government ______ introduce new environmental laws.", options: ["will", "is going to", "might"], answer: "might", feedback: "Without a firm decision or evidence, might is safest." },
+        { type: "mcq", prompt: "I’m not sure, but electric cars ______ replace petrol cars.", options: ["will", "are going to", "might"], answer: "might", feedback: "I’m not sure signals uncertainty, so use might." },
+        { type: "mcq", prompt: "By 2050, cities ______ be greener.", options: ["will", "are going to", "might"], answer: "will", feedback: "This is a general prediction about the future." },
+        { type: "mcq", prompt: "If nothing changes, water shortages ______ increase.", options: ["will", "are going to", "might"], answer: "will", feedback: "This is a predicted consequence." },
+        { type: "mcq", prompt: "People ______ use renewable energy more often.", options: ["will", "are going to", "might"], answer: "will", feedback: "This is a general future prediction." }
+      ]
+    };
+
+    const finalBank = [
+      { prompt: "Look! The glass is on the edge of the table. It ______ fall.", options: ["will", "is going to", "is falling", "might"], answer: "is going to", feedback: "Evidence now → going to." },
+      { prompt: "I forgot to send the email. I ______ send it now.", options: ["am going to", "am sending", "will", "might"], answer: "will", feedback: "Instant decision → will." },
+      { prompt: "We ______ our cousins at 6 p.m. The table is already booked.", options: ["will meet", "are meeting", "might meet", "meet"], answer: "are meeting", feedback: "Fixed arrangement → present continuous." },
+      { prompt: "I’m not sure, but it ______ snow tomorrow.", options: ["will", "is going to", "is snowing", "might"], answer: "might", feedback: "Not sure → might." },
+      { prompt: "She has bought paint and brushes. She ______ paint her room.", options: ["will", "is going to", "is painting", "might"], answer: "is going to", feedback: "Plan or intention → going to." },
+      { prompt: "Don’t worry. I ______ carry your bag.", options: ["am going to", "am carrying", "will", "might"], answer: "will", feedback: "Offer → will." },
+      { prompt: "They ______ to Paris next Friday. They’ve already bought the tickets.", options: ["will travel", "are travelling", "might travel", "travel"], answer: "are travelling", feedback: "Fixed travel arrangement → present continuous." },
+      { prompt: "The sky is very dark. It ______ rain.", options: ["will", "is going to", "is raining", "might"], answer: "is going to", feedback: "Evidence now → going to." },
+      { prompt: "I think people ______ live longer in the future.", options: ["are living", "are going to", "will", "might to"], answer: "will", feedback: "Prediction with I think → will." },
+      { prompt: "He ______ become a doctor. He has already applied to medical school.", options: ["will", "is going to", "is becoming", "might"], answer: "is going to", feedback: "Plan already decided → going to." },
+      { prompt: "What ______ this evening?", options: ["will you do", "are you doing", "do you do", "might you doing"], answer: "are you doing", feedback: "Evening plan/arrangement → present continuous." },
+      { prompt: "There is a lot of traffic. We ______ be late.", options: ["will", "are going to", "are being", "might to"], answer: "are going to", feedback: "Evidence now → going to." },
+      { prompt: "I promise I ______ tell anyone.", options: ["am not going to", "am not telling", "won’t", "might not to"], answer: "won’t", feedback: "Promise → will / won’t." },
+      { prompt: "Scientists say sea levels ______ rise if temperatures keep increasing.", options: ["are rising tomorrow", "will", "are going to", "might to"], answer: "will", feedback: "General future consequence → will." },
+      { prompt: "Our class has decided. We ______ organise a recycling campaign.", options: ["will", "are going to", "are organising tomorrow at 6", "might"], answer: "are going to", feedback: "Decision made before speaking → going to." },
+      { prompt: "He has a piano lesson at 5. He ______ football after school today.", options: ["won’t play", "isn’t playing", "doesn’t play", "might not to play"], answer: "isn’t playing", feedback: "Fixed arrangement prevents it → present continuous." },
+      { prompt: "Maybe robots ______ help teachers more in the future.", options: ["will", "are going to", "are helping", "might"], answer: "might", feedback: "Maybe → might." },
+      { prompt: "The baby is rubbing her eyes. She ______ fall asleep.", options: ["will", "is going to", "is falling", "might to"], answer: "is going to", feedback: "Evidence now → going to." },
+      { prompt: "I can’t find my pen. I ______ use yours for a minute.", options: ["am going to", "am using", "will", "might to"], answer: "will", feedback: "Instant decision/request → will." },
+      { prompt: "We ______ a test on Monday. The teacher told us yesterday.", options: ["will have", "are having", "might have", "have"], answer: "are having", feedback: "Fixed school arrangement → present continuous." }
+    ];
+
+    const state = {};
+    let finalSet = [];
+
+    function normalise(text) {
+      return String(text)
+        .toLowerCase()
+        .replace(/[’‘]/g, "'")
+        .replace(/[?.!]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function shuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function initialiseState(section) {
+      state[section] = {};
+      data[section].forEach((_, index) => {
+        state[section][index] = null;
+      });
+    }
+
+    function renderMCQ(section, item, index) {
+      const options = item.options.map((opt, optIndex) => `
+        <label class="option">
+          <input type="radio" name="${section}_${index}" value="${escapeHtml(opt)}" onchange="answerMCQ('${section}', ${index}, this.value)">
+          ${String.fromCharCode(97 + optIndex)}. ${opt}
+        </label>
+      `).join("");
+
+      return `
+        <div class="question" id="${section}_${index}_box">
+          <div class="question-title">${index + 1}. ${item.prompt}</div>
+          <div class="options">${options}</div>
+          <div class="feedback neutral" id="${section}_${index}_feedback"></div>
+        </div>
+      `;
+    }
+
+    function renderText(section, item, index) {
+      return `
+        <div class="question" id="${section}_${index}_box">
+          <div class="question-title">${index + 1}. ${item.prompt}</div>
+          <input type="text" id="${section}_${index}_input" placeholder="Write your answer here">
+          <div class="text-actions">
+            <button onclick="answerText('${section}', ${index})">Check</button>
+            <button class="ghost" onclick="showAnswer('${section}', ${index})">Show answer</button>
+          </div>
+          <div class="feedback neutral" id="${section}_${index}_feedback"></div>
+        </div>
+      `;
+    }
+
+    function renderSection(section, targetId) {
+      initialiseState(section);
+      const html = data[section].map((item, index) => item.type === "mcq" ? renderMCQ(section, item, index) : renderText(section, item, index)).join("");
+      document.getElementById(targetId).innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function answerMCQ(section, index, value) {
+      const item = data[section][index];
+      const correct = value === item.answer;
+      state[section][index] = correct;
+      const feedback = document.getElementById(`${section}_${index}_feedback`);
+      const box = document.getElementById(`${section}_${index}_box`);
+      feedback.textContent = correct ? `Correct, ${getStudentName()}. ${item.feedback}` : `Not quite, ${getStudentName()}. ${item.feedback}`;
+      feedback.className = `feedback ${correct ? "good" : "bad"}`;
+      box.classList.remove("shake", "pulse");
+      void box.offsetWidth;
+      box.classList.add(correct ? "pulse" : "shake");
+      updateAllScores();
+    }
+
+    function answerText(section, index) {
+      const item = data[section][index];
+      const input = document.getElementById(`${section}_${index}_input`);
+      const given = normalise(input.value);
+      const correct = item.answers.some(ans => normalise(ans) === given);
+      state[section][index] = correct;
+      const feedback = document.getElementById(`${section}_${index}_feedback`);
+      const box = document.getElementById(`${section}_${index}_box`);
+      feedback.textContent = correct ? `Correct, ${getStudentName()}. ${item.feedback}` : `Not quite, ${getStudentName()}. ${item.feedback}`;
+      feedback.className = `feedback ${correct ? "good" : "bad"}`;
+      box.classList.remove("shake", "pulse");
+      void box.offsetWidth;
+      box.classList.add(correct ? "pulse" : "shake");
+      updateAllScores();
+    }
+
+    function showAnswer(section, index) {
+      const item = data[section][index];
+      const feedback = document.getElementById(`${section}_${index}_feedback`);
+      feedback.textContent = `Model answer: ${item.feedback.replace(/^Question form: /, "").replace(/^Use going to because the evidence is clear now: /, "")}`;
+      feedback.className = "feedback neutral";
+    }
+
+    function resetSection(section) {
+      initialiseState(section);
+      data[section].forEach((item, index) => {
+        const feedback = document.getElementById(`${section}_${index}_feedback`);
+        feedback.textContent = "";
+        feedback.className = "feedback neutral";
+        const box = document.getElementById(`${section}_${index}_box`);
+        box.classList.remove("shake", "pulse");
+        if (item.type === "text") {
+          document.getElementById(`${section}_${index}_input`).value = "";
+        } else {
+          document.querySelectorAll(`input[name="${section}_${index}"]`).forEach(radio => radio.checked = false);
+        }
+      });
+      updateAllScores();
+    }
+
+    function scoreFor(section) {
+      const entries = Object.values(state[section] || {});
+      const score = entries.filter(Boolean).length;
+      const answered = entries.filter(value => value !== null).length;
+      return { score, answered, total: data[section].length };
+    }
+
+
+    function sectionPassed(section) {
+      const result = scoreFor(section);
+      const percent = Math.round((result.score / result.total) * 100);
+      return result.answered === result.total && percent >= SECTION_TARGET_PERCENT;
+    }
+
+    function setVisible(sectionId, visible) {
+      const element = document.getElementById(sectionId);
+      if (element) element.classList.toggle("hidden", !visible);
+    }
+
+    function updateGates() {
+      const hasName = Boolean(studentName && studentName.trim());
+
+      setVisible("lock_ex1", !hasName);
+      setVisible("exercise1", hasName);
+
+      const ex1Unlocked = hasName && sectionPassed("ex1");
+      const ex2Unlocked = ex1Unlocked && sectionPassed("ex2");
+      const ex3Unlocked = ex2Unlocked && sectionPassed("ex3");
+      const ex4Unlocked = ex3Unlocked && sectionPassed("ex4");
+      const ex5Unlocked = ex4Unlocked && sectionPassed("ex5");
+
+      setVisible("lock_ex2", hasName && !ex1Unlocked);
+      setVisible("exercise2", ex1Unlocked);
+
+      setVisible("lock_ex3", ex1Unlocked && !ex2Unlocked);
+      setVisible("exercise3", ex2Unlocked);
+
+      setVisible("lock_ex4", ex2Unlocked && !ex3Unlocked);
+      setVisible("exercise4", ex3Unlocked);
+
+      setVisible("lock_ex5", ex3Unlocked && !ex4Unlocked);
+      setVisible("exercise5", ex4Unlocked);
+
+      setVisible("lock_final", ex4Unlocked && !ex5Unlocked);
+      setVisible("final", ex5Unlocked);
+    }
+
+    function updateStatus(section, label) {
+      const { score, answered, total } = scoreFor(section);
+      const element = document.getElementById(`${section}Status`);
+      if (!element) return;
+      if (answered < total) {
+        element.textContent = `${label}: ${score}/${total}. Finish the remaining questions.`;
+      } else if (score === total) {
+        element.textContent = `${label}: ${score}/${total}. Excellent.`;
+        element.style.background = "var(--soft-good)";
+        element.style.color = "var(--good)";
+      } else {
+        element.textContent = `${label}: ${score}/${total}. Correct the mistakes and try again.`;
+        element.style.background = "var(--soft-bad)";
+        element.style.color = "var(--bad)";
+      }
+    }
+
+    function updateAllScores() {
+      const sections = ["ex1", "ex2", "ex3", "ex4", "ex5"];
+      let score = 0;
+      let total = 0;
+      sections.forEach(section => {
+        const result = scoreFor(section);
+        score += result.score;
+        total += result.total;
+      });
+
+      document.getElementById("practiceScore").textContent = score;
+      document.getElementById("practiceTotal").textContent = total;
+
+      updateStatus("ex1", "will / won’t");
+      updateStatus("ex2", "going to questions");
+      updateStatus("ex3", "going to predictions");
+      updateStatus("ex4", "mixed choice");
+      updateStatus("ex5", "environment futures");
+
+      const finalScore = Number(document.getElementById("finalScore").textContent);
+      const finalTotal = Number(document.getElementById("finalTotal").textContent);
+      const combinedTotal = total + finalTotal;
+      const combinedScore = score + finalScore;
+      const percent = combinedTotal ? Math.round((combinedScore / combinedTotal) * 100) : 0;
+      document.getElementById("overallProgress").style.width = `${percent}%`;
+      updateGates();
+    }
+
+    function renderFinal() {
+      finalSet = shuffle(finalBank).slice(0, 15);
+      const html = finalSet.map((item, index) => {
+        const options = shuffle(item.options).map((opt, optIndex) => `
+          <label class="option">
+            <input type="radio" name="final_${index}" value="${escapeHtml(opt)}">
+            ${String.fromCharCode(97 + optIndex)}. ${opt}
+          </label>
+        `).join("");
+        return `
+          <div class="question" id="final_${index}_box">
+            <div class="question-title">${index + 1}. ${item.prompt}</div>
+            <div class="options">${options}</div>
+            <div class="feedback neutral" id="final_${index}_feedback"></div>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("finalQuestions").innerHTML = html;
+      document.getElementById("finalScore").textContent = "0";
+      document.getElementById("finalTotal").textContent = finalSet.length;
+      document.getElementById("finalStatus").textContent = "Complete the final challenge. The official Google Form unlocks when you reach 90%.";
+      document.getElementById("finalStatus").style.background = "#f8fafc";
+      document.getElementById("finalStatus").style.color = "var(--muted)";
+      document.getElementById("successPanel").style.display = "none";
+      document.getElementById("lockedPanel").style.display = "block";
+      document.getElementById("resourceLink").href = FINAL_FORM_URL;
+      updateAllScores();
+    }
+
+    function checkFinal() {
+      let score = 0;
+      finalSet.forEach((item, index) => {
+        const selected = document.querySelector(`input[name="final_${index}"]:checked`);
+        const feedback = document.getElementById(`final_${index}_feedback`);
+        const box = document.getElementById(`final_${index}_box`);
+        if (!selected) {
+          feedback.textContent = `${getStudentName()}, no answer selected.`;
+          feedback.className = "feedback bad";
+          box.classList.add("shake");
+          return;
+        }
+        const correct = selected.value === item.answer;
+        if (correct) score++;
+        feedback.textContent = correct ? `Correct, ${getStudentName()}. ${item.feedback}` : `Not quite, ${getStudentName()}. ${item.feedback}`;
+        feedback.className = `feedback ${correct ? "good" : "bad"}`;
+        box.classList.remove("shake", "pulse");
+        void box.offsetWidth;
+        box.classList.add(correct ? "pulse" : "shake");
+      });
+
+      const total = finalSet.length;
+      const percent = Math.round((score / total) * 100);
+      document.getElementById("finalScore").textContent = score;
+      document.getElementById("finalTotal").textContent = total;
+
+      const finalStatus = document.getElementById("finalStatus");
+      if (percent >= UNLOCK_PERCENT) {
+        finalStatus.textContent = `Final score: ${score}/${total} (${percent}%). Target reached.`;
+        finalStatus.style.background = "var(--soft-good)";
+        finalStatus.style.color = "var(--good)";
+        document.getElementById("successPanel").style.display = "block";
+        document.getElementById("lockedPanel").style.display = "none";
+      } else {
+        finalStatus.textContent = `Final score: ${score}/${total} (${percent}%). Target not reached. Check the feedback and try again.`;
+        finalStatus.style.background = "var(--soft-bad)";
+        finalStatus.style.color = "var(--bad)";
+        document.getElementById("successPanel").style.display = "none";
+        document.getElementById("lockedPanel").style.display = "block";
+      }
+
+      updateAllScores();
+    }
+
+    function newFinalAttempt() {
+      renderFinal();
+      document.getElementById("final").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    loadStudentName();
+    document.getElementById("studentNameInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") saveStudentName();
+    });
+
+    renderSection("ex1", "ex1Questions");
+    renderSection("ex2", "ex2Questions");
+    renderSection("ex3", "ex3Questions");
+    renderSection("ex4", "ex4Questions");
+    renderSection("ex5", "ex5Questions");
+    renderFinal();
+    updateAllScores();
+  </script>
+</body>
+</html>
